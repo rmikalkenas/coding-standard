@@ -10,7 +10,6 @@ use function array_shift;
 use function array_unshift;
 use function count;
 use function explode;
-use function getcwd;
 use function implode;
 use function in_array;
 use function pathinfo;
@@ -47,7 +46,7 @@ class FilepathNamespaceExtractor
 		}, $extensions);
 	}
 
-	public function getTypeNameFromProjectPath(string $path): ?string
+	public function getTypeNameFromProjectPath(string $path, string $basePath): ?string
 	{
 		$extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 		if (!in_array($extension, $this->extensions, true)) {
@@ -55,7 +54,7 @@ class FilepathNamespaceExtractor
 		}
 
 		/** @var string[] $pathParts */
-		$pathParts = preg_split('~[/\\\]~', str_replace($this->getCurrentDir(), '', $path));
+		$pathParts = preg_split('~[/\\\]~', str_replace($basePath, '', $path));
 		$rootNamespace = null;
 		while (count($pathParts) > 0) {
 			array_shift($pathParts);
@@ -85,13 +84,6 @@ class FilepathNamespaceExtractor
 		}));
 
 		return substr($typeName, 0, -strlen('.' . $extension));
-	}
-
-	protected function getCurrentDir(): string
-	{
-		$dir = getcwd();
-
-		return $dir !== false ? $dir : '';
 	}
 
 }

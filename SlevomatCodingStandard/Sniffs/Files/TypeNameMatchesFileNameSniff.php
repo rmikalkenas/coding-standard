@@ -89,7 +89,8 @@ class TypeNameMatchesFileNameSniff implements Sniff
 		}
 
 		$expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath(
-			$phpcsFile->getFilename()
+			$phpcsFile->getFilename(),
+			$phpcsFile->config->basepath ?? ''
 		);
 		if ($typeName === $expectedTypeName) {
 			return;

@@ -127,11 +127,11 @@ class FilepathNamespaceExtractorTest extends TestCase
 	 * @param string $path
 	 * @param string|null $expectedNamespace
 	 * @param string[] $extensions
-	 * @param string $currentDir
+	 * @param string $basePath
 	 */
-	public function testGetTypeNameFromProjectPath(string $path, ?string $expectedNamespace, array $extensions, string $currentDir): void
+	public function testGetTypeNameFromProjectPath(string $path, ?string $expectedNamespace, array $extensions, string $basePath): void
 	{
-		$extractor = new FilepathNamespaceExtractorStub(
+		$extractor = new FilepathNamespaceExtractor(
 			[
 				'app/ui' => 'Slevomat\\UI',
 				'app' => 'Slevomat',
@@ -139,11 +139,10 @@ class FilepathNamespaceExtractorTest extends TestCase
 				'src' => 'Slevomat',
 			],
 			['components', 'forms', 'model', 'models', 'services', 'stubs', 'data'],
-			$extensions,
-			$currentDir
+			$extensions
 		);
 		$path = str_replace('/', DIRECTORY_SEPARATOR, $path);
-		self::assertSame($expectedNamespace, $extractor->getTypeNameFromProjectPath($path));
+		self::assertSame($expectedNamespace, $extractor->getTypeNameFromProjectPath($path, $basePath));
 	}
 
 }
